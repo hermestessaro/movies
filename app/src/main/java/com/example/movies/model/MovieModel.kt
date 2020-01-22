@@ -32,7 +32,13 @@ data class Movie(
     @ColumnInfo(name="image_path")
     @SerializedName("poster_path")
     val imagePath: String?
+
+    //@ColumnInfo(name="favorited")
+    //val favorited: Boolean?
 ) {
     @PrimaryKey(autoGenerate = true)
     var uuid: Int = 0
+
+
+
 }

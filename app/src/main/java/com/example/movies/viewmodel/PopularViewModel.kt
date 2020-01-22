@@ -24,10 +24,20 @@ class PopularViewModel(application: Application) : BaseViewModel(application) {
     val moviesLoadError = MutableLiveData<Boolean>()
     val loading = MutableLiveData<Boolean>()
 
-    fun fetchFromRemote() {
+    private fun fetchFromDatabase(){
+        loading.value = true
+        launch {
+            val movies = MovieDatabase(getApplication()).movieDao().getPopular()
+            moviesRetrieved(movies)
+            Toast.makeText(getApplication(), "Movies retrieved from db", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+
+    fun fetchFromRemote(page: Int) {
         loading.value = true
         disposable.add(
-            service.getPopular(1)
+            service.getPopular(page)
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeWith(object : DisposableSingleObserver<ApiAnswer>() {
@@ -49,7 +59,6 @@ class PopularViewModel(application: Application) : BaseViewModel(application) {
     private fun storeMoviesLocally(list: List<Movie>) {
         launch {
             val dao = MovieDatabase(getApplication()).movieDao()
-            dao.deleteAllMovies()
             val result = dao.insertAll(*list.toTypedArray())
             var i = 0
             while (i < list.size) {

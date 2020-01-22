@@ -17,6 +17,7 @@ class PopularFragment : Fragment() {
 
     private lateinit var viewModel: PopularViewModel
     private val moviesListAdapter = MoviesListAdapter(arrayListOf())
+    var page = 0
 
 
     override fun onCreateView(
@@ -26,7 +27,7 @@ class PopularFragment : Fragment() {
     ): View? {
         viewModel =
             ViewModelProviders.of(this).get(PopularViewModel::class.java)
-        viewModel.fetchFromRemote()
+        viewModel.fetchFromRemote(page)
         val root = inflater.inflate(R.layout.fragment_list_movies, container, false)
 
         return root
@@ -44,7 +45,7 @@ class PopularFragment : Fragment() {
             moviesList.visibility = View.GONE
             listError.visibility = View.GONE
             loadingView.visibility = View.VISIBLE
-            viewModel.fetchFromRemote()
+            viewModel.fetchFromRemote(page + 1)
             refresh_layout.isRefreshing = false
         }
 

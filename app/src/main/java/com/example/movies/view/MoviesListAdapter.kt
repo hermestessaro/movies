@@ -11,10 +11,10 @@ import com.example.movies.model.Movie
 class MoviesListAdapter(val moviesList: ArrayList<Movie>) :
     RecyclerView.Adapter<MoviesListAdapter.MovieViewHolder>() {
 
+    private var isLoading = false
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MovieViewHolder {
         val inflater = LayoutInflater.from(parent.context)
-        val view =
-            DataBindingUtil.inflate<ItemMovieBinding>(inflater, R.layout.item_movie, parent, false)
+        val view = DataBindingUtil.inflate<ItemMovieBinding>(inflater, R.layout.item_movie, parent, false)
         return MovieViewHolder(view)
     }
 

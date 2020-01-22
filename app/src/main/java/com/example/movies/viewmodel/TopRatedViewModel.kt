@@ -1,10 +1,13 @@
 package com.example.movies.viewmodel
 
 import android.app.Application
+import android.content.Context
 import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.paging.DataSource
+import androidx.paging.PagedList
 import com.example.movies.api.ApiAnswer
 import com.example.movies.api.ApiService
 import com.example.movies.database.MovieDatabase
@@ -24,16 +27,24 @@ class TopRatedViewModel(application: Application) : BaseViewModel(application) {
     val moviesLoadError = MutableLiveData<Boolean>()
     val loading = MutableLiveData<Boolean>()
 
-    fun fetchFromRemote() {
+
+    fun fetchFromDatabase(){
+        loading.value = true
+        launch {
+            val movieList = MovieDatabase(getApplication()).movieDao().getTopRated()
+            moviesRetrieved(movieList)
+            Toast.makeText(getApplication(), "Movies retrieved from db", Toast.LENGTH_SHORT).show()
+        }
+    }
+    fun fetchFromRemote(page: Int) {
         loading.value = true
         disposable.add(
-            service.getTopRated(1)
+            service.getTopRated(page)
                 .subscribeOn(Schedulers.newThread()) //to run the call to the api on a background thread
                 .observeOn(AndroidSchedulers.mainThread()) //result of the process will be computed in the main thread
                 .subscribeWith(object : DisposableSingleObserver<ApiAnswer>() { //observer of the single
                     override fun onSuccess(answer: ApiAnswer) {
-                        //storeMoviesLocally(answer.results)
-                        moviesRetrieved(answer.results)
+                        storeMoviesLocally(answer.results)
                         Toast.makeText(getApplication(),"Movies retrieved from endpoint", Toast.LENGTH_SHORT).show()
                     }
 
@@ -49,12 +60,13 @@ class TopRatedViewModel(application: Application) : BaseViewModel(application) {
     private fun storeMoviesLocally(list: List<Movie>) {
         launch {
             val dao = MovieDatabase(getApplication()).movieDao()
-            dao.deleteAllMovies()
             val result = dao.insertAll(*list.toTypedArray())
             var i = 0
             while (i < list.size) {
-                list[i].uuid = result[i].toInt()
-                i++
+                list[i]?.let {
+                    it.uuid = result[i].toInt()
+                    i++
+                }
             }
             moviesRetrieved(list)
         }
