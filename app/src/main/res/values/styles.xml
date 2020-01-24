@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
 
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
@@ -11,10 +11,37 @@
     <style name="title">
         <item name="android:textSize">18sp</item>
         <item name="android:textStyle">bold</item>
+        <item name="android:fontFamily" tools:targetApi="jelly_bean">@font/roboto_regular</item>
+    </style>
+
+    <style name="titleDetail">
+        <item name="android:textSize">24sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/colorWhite</item>
+        <item name="android:font" tools:targetApi="o">@font/roboto_regular</item>
     </style>
 
     <style name="text">
         <item name="android:textSize">14sp</item>
+        <item name="android:font" tools:targetApi="o">@font/roboto_regular</item>
+
+    </style>
+
+    <style name="textDetail">
+        <item name="android:textSize">16sp</item>
+        <item name="android:font" tools:targetApi="o">@font/roboto_regular</item>
+    </style>
+
+    <style name="textDetailWhite">
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">@color/colorWhite</item>
+        <item name="android:font" tools:targetApi="o">@font/roboto_regular</item>
+    </style>
+
+    <style name="textDetailBold">
+        <item name="android:textSize">16sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:font" tools:targetApi="o">@font/roboto_regular</item>
     </style>
 
 </resources>

@@ -9,17 +9,47 @@
         android:id="@+id/navigation_top_rated"
         android:name="com.example.movies.view.TopRatedFragment"
         android:label="@string/app_title"
-        tools:layout="@layout/fragment_list_movies" />
+        tools:layout="@layout/fragment_list_movies" >
+        <action
+            android:id="@+id/ActionTopRatedDetail"
+            app:destination="@id/detailFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim" />
+        <argument
+            android:name="listType"
+            android:defaultValue="1"
+            app:argType="integer"/>
+    </fragment>
 
     <fragment
         android:id="@+id/navigation_popular"
         android:name="com.example.movies.view.PopularFragment"
         android:label="@string/app_title"
-        tools:layout="@layout/fragment_list_movies" />
+        tools:layout="@layout/fragment_list_movies" >
+        <action
+            android:id="@+id/ActionPopularDetail"
+            app:destination="@id/detailFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim" />
+        <argument
+            android:name="listType"
+            android:defaultValue="2"
+            app:argType="integer"/>
+    </fragment>
 
     <fragment
         android:id="@+id/navigation_favorites"
         android:name="com.example.movies.view.FavoritesFragment"
         android:label="@string/app_title"
         tools:layout="@layout/fragment_list_movies" />
+
+    <fragment
+        android:id="@+id/detailFragment"
+        android:name="com.example.movies.view.DetailFragment"
+        android:label="DetailFragment">
+    <argument
+        android:name="movieId"
+        android:defaultValue="0"
+        app:argType="integer"/>
+    </fragment>
 </navigation>

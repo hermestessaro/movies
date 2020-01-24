@@ -5,10 +5,15 @@ import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.paging.DataSource
+import androidx.paging.LivePagedListBuilder
+import androidx.paging.PagedList
 import com.example.movies.api.ApiAnswer
 import com.example.movies.api.ApiService
 import com.example.movies.database.MovieDatabase
 import com.example.movies.model.Movie
+import com.example.movies.model.MovieDataSource
+import com.example.movies.util.MovieBoundaryCallback
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.observers.DisposableSingleObserver
@@ -18,65 +23,31 @@ import kotlinx.coroutines.launch
 class PopularViewModel(application: Application) : BaseViewModel(application) {
 
     private val service = ApiService()
-    private val disposable = CompositeDisposable()
 
-    val movies = MutableLiveData<List<Movie>>()
-    val moviesLoadError = MutableLiveData<Boolean>()
-    val loading = MutableLiveData<Boolean>()
+    var moviesLiveData: LiveData<PagedList<Movie>>
 
-    private fun fetchFromDatabase(){
-        loading.value = true
-        launch {
-            val movies = MovieDatabase(getApplication()).movieDao().getPopular()
-            moviesRetrieved(movies)
-            Toast.makeText(getApplication(), "Movies retrieved from db", Toast.LENGTH_SHORT).show()
-        }
+    val config = PagedList.Config.Builder()
+        .setPageSize(20)
+        .build()
+
+    init {
+        moviesLiveData = initializedPagedListBuilder(config, application).build()
     }
 
-
-    fun fetchFromRemote(page: Int) {
-        loading.value = true
-        disposable.add(
-            service.getPopular(page)
-                .subscribeOn(Schedulers.newThread())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeWith(object : DisposableSingleObserver<ApiAnswer>() {
-                    override fun onSuccess(answer: ApiAnswer) {
-                        //storeMoviesLocally(answer.results)
-                        moviesRetrieved(answer.results)
-                        Toast.makeText(getApplication(),"Movies retrieved from endpoint", Toast.LENGTH_SHORT).show()
-                    }
-
-                    override fun onError(e: Throwable) {
-                        moviesLoadError.value = true
-                        loading.value = false
-                        e.printStackTrace()
-                    }
-                })
-        )
-    }
-
-    private fun storeMoviesLocally(list: List<Movie>) {
-        launch {
-            val dao = MovieDatabase(getApplication()).movieDao()
-            val result = dao.insertAll(*list.toTypedArray())
-            var i = 0
-            while (i < list.size) {
-                list[i].uuid = result[i].toInt()
-                i++
+    fun initializedPagedListBuilder(
+        config: PagedList.Config,
+        application: Application
+    ): LivePagedListBuilder<Int, Movie> {
+        val dataSourceFactory = object : DataSource.Factory<Int, Movie>() {
+            override fun create(): DataSource<Int, Movie> {
+                return MovieDataSource(application, 1)
             }
-            moviesRetrieved(list)
         }
-    }
 
-    private fun moviesRetrieved(moviesList: List<Movie>) {
-        movies.value = moviesList
-        moviesLoadError.value = false
-        loading.value = false
-    }
-
-    override fun onCleared() {
-        super.onCleared()
-        disposable.clear()
+        return LivePagedListBuilder<Int, Movie>(
+            MovieDatabase(getApplication()).movieDao().getPopularPaged(),
+            config
+        )
+            .setBoundaryCallback(MovieBoundaryCallback(1, service, MovieDatabase(application)))
     }
 }

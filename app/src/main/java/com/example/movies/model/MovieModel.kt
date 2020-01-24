@@ -7,9 +7,10 @@ import com.google.gson.annotations.SerializedName
 
 @Entity
 data class Movie(
+    @PrimaryKey
     @ColumnInfo(name="movie_id")
     @SerializedName("id")
-    val movieId: String?,
+    val movieId: String,
 
     @ColumnInfo(name="movie_title")
     @SerializedName("title")
@@ -36,8 +37,8 @@ data class Movie(
     //@ColumnInfo(name="favorited")
     //val favorited: Boolean?
 ) {
-    @PrimaryKey(autoGenerate = true)
-    var uuid: Int = 0
+    //@PrimaryKey(autoGenerate = true)
+    //var uuid: Int = 0
 
 
 

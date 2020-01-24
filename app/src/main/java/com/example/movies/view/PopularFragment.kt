@@ -8,17 +8,18 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import androidx.paging.PagedList
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.movies.R
+import com.example.movies.database.MovieDatabase
+import com.example.movies.model.Movie
 import com.example.movies.viewmodel.PopularViewModel
 import kotlinx.android.synthetic.main.fragment_list_movies.*
 
 class PopularFragment : Fragment() {
 
     private lateinit var viewModel: PopularViewModel
-    private val moviesListAdapter = MoviesListAdapter(arrayListOf())
-    var page = 0
-
+    private val moviesListAdapter = MoviesListAdapter()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -27,7 +28,6 @@ class PopularFragment : Fragment() {
     ): View? {
         viewModel =
             ViewModelProviders.of(this).get(PopularViewModel::class.java)
-        viewModel.fetchFromRemote(page)
         val root = inflater.inflate(R.layout.fragment_list_movies, container, false)
 
         return root
@@ -41,39 +41,12 @@ class PopularFragment : Fragment() {
             adapter = moviesListAdapter
         }
 
-        refresh_layout.setOnRefreshListener {
-            moviesList.visibility = View.GONE
-            listError.visibility = View.GONE
-            loadingView.visibility = View.VISIBLE
-            viewModel.fetchFromRemote(page + 1)
-            refresh_layout.isRefreshing = false
-        }
-
         observeViewModel()
     }
-
     fun observeViewModel() {
-        viewModel.movies.observe(this, Observer { movies ->
-            movies?.let {
-                moviesList.visibility = View.VISIBLE
-                moviesListAdapter.updateMovielist(movies)
-            }
-        })
-
-        viewModel.moviesLoadError.observe(this, Observer { isError ->
-            isError?.let {
-                listError.visibility = if (it) View.VISIBLE else View.GONE
-            }
-        })
-
-        viewModel.loading.observe(this, Observer { isLoading ->
-            isLoading?.let {
-                loadingView.visibility = if (it) View.VISIBLE else View.GONE
-                if (it) {
-                    listError.visibility = View.GONE
-                    moviesList.visibility = View.GONE
-                }
-            }
+        viewModel.moviesLiveData.observe (this, Observer<PagedList<Movie>>{
+            moviesList.visibility = View.VISIBLE
+            moviesListAdapter.submitList(it)
         })
     }
 }

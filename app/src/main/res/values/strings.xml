@@ -10,6 +10,6 @@
     <string name="popular">Popular</string>
     <string name="favorites">Favorites</string>
     <string name="list_error">An error occurred while loading data.</string>
-    <string name="release_date">Release Date:</string>
-    <string name="vote_average">Vote Average:</string>
+    <string name="release_date">Release Date: </string>
+    <string name="vote_average">Vote Average: </string>
 </resources>
