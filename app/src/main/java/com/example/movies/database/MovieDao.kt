@@ -27,6 +27,12 @@ interface MovieDao {
     @Query("SELECT * FROM movie WHERE movie_id = :movieId")
     suspend fun getMovie(movieId: Int): Movie
 
+    @Query("SELECT * FROM movie WHERE favorited = 1")
+    suspend fun getAllFavorited(): List<Movie>
+
+    @Query("UPDATE movie SET favorited = :favoritedValue WHERE movie_id = :movieId")
+    suspend fun updateFavorited(favoritedValue: Boolean, movieId: Int)
+
     @Query("DELETE FROM movie")
     fun deleteAllMovies()
 

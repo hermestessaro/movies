@@ -16,7 +16,7 @@ import kotlinx.android.synthetic.main.fragment_list_movies.*
 
 class TopRatedFragment : Fragment() {
     private lateinit var viewModel: TopRatedViewModel
-    private val moviesListAdapter = MoviesListAdapter(0)
+    private val moviesListAdapter = MoviesPagedListAdapter(0)
 
     override fun onCreateView(
         inflater: LayoutInflater,

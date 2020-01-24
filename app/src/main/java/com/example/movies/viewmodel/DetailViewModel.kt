@@ -16,4 +16,10 @@ class DetailViewModel(application: Application): BaseViewModel(application) {
             movieLiveData.value = movie
         }
     }
+
+    fun changeFavorite(value: Boolean, movieId: Int){
+        launch {
+            MovieDatabase(getApplication()).movieDao().updateFavorited(value, movieId)
+        }
+    }
 }

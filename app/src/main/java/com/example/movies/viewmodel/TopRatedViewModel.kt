@@ -38,11 +38,6 @@ class TopRatedViewModel(application: Application) : BaseViewModel(application) {
         config: PagedList.Config,
         application: Application
     ): LivePagedListBuilder<Int, Movie> {
-        val dataSourceFactory = object : DataSource.Factory<Int, Movie>() {
-            override fun create(): DataSource<Int, Movie> {
-                return MovieDataSource(application, 1)
-            }
-        }
 
         return LivePagedListBuilder<Int, Movie>(
             MovieDatabase(getApplication()).movieDao().getTopRatedPaged(),

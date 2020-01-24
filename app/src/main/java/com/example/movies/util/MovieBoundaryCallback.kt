@@ -25,6 +25,7 @@ class MovieBoundaryCallback(
 
     private val TOP_RATED = 0
     private val POPULAR = 1
+    private val FAVORITES = 2
     var lastRequestedPage = 1
     val disposable = CompositeDisposable()
 
@@ -77,8 +78,11 @@ class MovieBoundaryCallback(
         if(code == TOP_RATED){
             return service.getTopRated(page)
         }
-        else if(code == POPULAR){
+        if(code == POPULAR){
             return service.getPopular(page)
+        }
+        if(code == FAVORITES){
+            //doest nothing
         }
         return null
     }
@@ -87,6 +91,9 @@ class MovieBoundaryCallback(
 
     private fun saveInDatabase(movies: List<Movie>){
         GlobalScope.launch {
+            for(movie in movies){
+                movie.favorited = false
+            }
             database.movieDao().insertAll(movies)
         }
     }

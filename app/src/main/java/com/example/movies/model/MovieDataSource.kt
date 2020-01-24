@@ -77,7 +77,10 @@ class MovieDataSource(app: Application, private val code: Int):PageKeyedDataSour
     private fun storeMoviesLocally(list: List<Movie>, application: Application) {
         GlobalScope.launch {
             val dao = MovieDatabase(application).movieDao()
-            val result = dao.insertAll(list)
+            for(movie in list){
+                movie.favorited = false
+            }
+            dao.insertAll(list)
         }
 
     }

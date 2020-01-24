@@ -48,6 +48,6 @@ class PopularViewModel(application: Application) : BaseViewModel(application) {
             MovieDatabase(getApplication()).movieDao().getPopularPaged(),
             config
         )
-            .setBoundaryCallback(MovieBoundaryCallback(1, service, MovieDatabase(application)))
+            .setBoundaryCallback(MovieBoundaryCallback(2, service, MovieDatabase(application)))
     }
 }
