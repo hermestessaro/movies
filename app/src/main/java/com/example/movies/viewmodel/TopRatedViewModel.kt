@@ -1,7 +1,6 @@
 package com.example.movies.viewmodel
 
 import android.app.Application
-import android.content.Context
 import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -32,7 +31,6 @@ class TopRatedViewModel(application: Application) : BaseViewModel(application) {
         .build()
 
     init {
-        //MovieDatabase(getApplication()).movieDao().deleteAllMovies()
         moviesLiveData = initializedPagedListBuilder(config, application).build()
     }
 
@@ -42,7 +40,7 @@ class TopRatedViewModel(application: Application) : BaseViewModel(application) {
     ): LivePagedListBuilder<Int, Movie> {
         val dataSourceFactory = object : DataSource.Factory<Int, Movie>() {
             override fun create(): DataSource<Int, Movie> {
-                return MovieDataSource(application, 0)
+                return MovieDataSource(application, 1)
             }
         }
 
@@ -50,6 +48,6 @@ class TopRatedViewModel(application: Application) : BaseViewModel(application) {
             MovieDatabase(getApplication()).movieDao().getTopRatedPaged(),
             config
         )
-            .setBoundaryCallback(MovieBoundaryCallback(0, service, MovieDatabase(application)))
+            .setBoundaryCallback(MovieBoundaryCallback(1, service, MovieDatabase(application)))
     }
 }

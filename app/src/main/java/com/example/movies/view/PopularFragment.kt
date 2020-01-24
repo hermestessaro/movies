@@ -19,7 +19,7 @@ import kotlinx.android.synthetic.main.fragment_list_movies.*
 class PopularFragment : Fragment() {
 
     private lateinit var viewModel: PopularViewModel
-    private val moviesListAdapter = MoviesListAdapter()
+    private val moviesListAdapter = MoviesListAdapter(1)
 
     override fun onCreateView(
         inflater: LayoutInflater,

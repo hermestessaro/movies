@@ -1,13 +1,10 @@
 package com.example.movies.model
 
 import android.app.Application
-import android.util.Log
 import androidx.paging.PageKeyedDataSource
-import com.example.movies.api.Api
 import com.example.movies.api.ApiAnswer
 import com.example.movies.api.ApiService
 import com.example.movies.database.MovieDatabase
-import com.example.movies.viewmodel.TopRatedViewModel
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable

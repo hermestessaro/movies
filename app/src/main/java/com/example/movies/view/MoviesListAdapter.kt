@@ -15,7 +15,7 @@ import com.example.movies.databinding.ItemMovieBinding
 import com.example.movies.model.Movie
 import kotlinx.android.synthetic.main.item_movie.view.*
 
-class MoviesListAdapter: MovieClickListener,
+class MoviesListAdapter(val listType: Int): MovieClickListener,
     PagedListAdapter<Movie, MoviesListAdapter.MovieViewHolder>(object : DiffUtil.ItemCallback<Movie>(){
         override fun areItemsTheSame(oldItem: Movie, newItem: Movie)
             = oldItem.movieId == newItem.movieId
@@ -42,9 +42,24 @@ class MoviesListAdapter: MovieClickListener,
 
     override fun onMovieClicked(v: View) {
         val movieId = v.movieId.text.toString().toInt()
-        val action = TopRatedFragmentDirections.ActionTopRatedDetail()
-        action.movieId = movieId
-        Navigation.findNavController(v).navigate(action)
+
+        if (listType == 0) {
+            val action = TopRatedFragmentDirections.ActionDetail()
+            action.movieId = movieId
+            Navigation.findNavController(v).navigate(action)
+        }
+        if (listType == 1) {
+            val action = PopularFragmentDirections.ActionDetail()
+            action.movieId = movieId
+            Navigation.findNavController(v).navigate(action)
+        }
+        if (listType == 2) {
+            val action = FavoritesFragmentDirections.ActionDetail()
+            action.movieId = movieId
+            Navigation.findNavController(v).navigate(action)
+        }
+
+
     }
 
     class MovieViewHolder(var view: ItemMovieBinding) : RecyclerView.ViewHolder(view.root)
