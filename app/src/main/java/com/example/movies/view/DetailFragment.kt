@@ -2,8 +2,11 @@ package com.example.movies.view
 
 
 import android.os.Bundle
+import android.util.Log
 import android.view.*
 import android.widget.Toast
+import androidx.core.app.ActivityCompat.invalidateOptionsMenu
+import androidx.core.view.get
 import androidx.fragment.app.Fragment
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
@@ -53,25 +56,37 @@ class DetailFragment : Fragment() {
             currentMovie = movie
             movie?.let{
                 dataBinding.movie = movie
+                invalidateOptionsMenu(activity)
+
             }
         })
     }
 
 
+
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
         inflater.inflate(R.menu.detail_menu, menu)
+
+
+
+
+    }
+
+    override fun onPrepareOptionsMenu(menu: Menu) {
+        val item = menu.findItem(R.id.action_favorite)
         currentMovie?.let {
-            if(it.favorited == true){
-                menu.getItem(R.id.action_favorite).setIcon(R.drawable.ic_star)
-                menu.getItem(R.id.action_favorite).setChecked(true)
+            if(it.favorited){
+                Log.d("favorited", "true")
+                item.setIcon(R.drawable.ic_star)
+                item.setChecked(true)
             }
             else{
-                menu.getItem(R.id.action_favorite).setIcon(R.drawable.ic_star_border)
-                menu.getItem(R.id.action_favorite).setChecked(false)
+                Log.d("favorited", "false")
+                item.setIcon(R.drawable.ic_star_border)
+                item.setChecked(false)
             }
         }
-
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -92,7 +107,7 @@ class DetailFragment : Fragment() {
                     }
                 }
 
-                Toast.makeText(context, "favorito", Toast.LENGTH_SHORT).show()
+                //Toast.makeText(context, "favorito", Toast.LENGTH_SHORT).show()
             }
         }
 

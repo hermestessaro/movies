@@ -40,6 +40,13 @@ class FavoritesFragment : Fragment() {
         observeViewModel()
 
     }
+
+    override fun onResume() {
+        super.onResume()
+        viewModel.fetchFromDatabase()
+
+    }
+
     fun observeViewModel() {
         viewModel.moviesLiveData.observe (this, Observer{
             moviesList.visibility = View.VISIBLE

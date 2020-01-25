@@ -69,7 +69,9 @@
                     style="@style/text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@{movie.releaseDate}" />
+                    android:layout_marginStart="4dp"
+                    android:text="@{movie.releaseDate}"
+                    android:layout_marginLeft="4dp" />
             </LinearLayout>
 
             <LinearLayout
@@ -91,7 +93,9 @@
                     style="@style/text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@{movie.voteAverage}" />
+                    android:layout_marginStart="4dp"
+                    android:text="@{movie.voteAverage}"
+                    android:layout_marginLeft="4dp" />
             </LinearLayout>
 
         </LinearLayout>

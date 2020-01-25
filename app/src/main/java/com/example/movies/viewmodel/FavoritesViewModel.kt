@@ -23,7 +23,7 @@ class FavoritesViewModel(application: Application) : BaseViewModel(application) 
         fetchFromDatabase()
     }
 
-    private fun fetchFromDatabase(){
+    fun fetchFromDatabase(){
         launch {
             val movies = MovieDatabase(getApplication()).movieDao().getAllFavorited()
             moviesReturned(movies)

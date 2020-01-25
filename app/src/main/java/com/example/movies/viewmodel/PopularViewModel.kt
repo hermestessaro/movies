@@ -22,7 +22,7 @@ import kotlinx.coroutines.launch
 
 class PopularViewModel(application: Application) : BaseViewModel(application) {
 
-    private val service = ApiService()
+    private val service = ApiService(application)
 
     var moviesLiveData: LiveData<PagedList<Movie>>
 

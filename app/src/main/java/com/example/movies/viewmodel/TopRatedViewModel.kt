@@ -22,7 +22,7 @@ import kotlinx.coroutines.launch
 
 class TopRatedViewModel(application: Application) : BaseViewModel(application) {
 
-    private val service = ApiService()
+    private val service = ApiService(application)
 
     var moviesLiveData: LiveData<PagedList<Movie>>
 
@@ -40,9 +40,7 @@ class TopRatedViewModel(application: Application) : BaseViewModel(application) {
     ): LivePagedListBuilder<Int, Movie> {
 
         return LivePagedListBuilder<Int, Movie>(
-            MovieDatabase(getApplication()).movieDao().getTopRatedPaged(),
-            config
-        )
-            .setBoundaryCallback(MovieBoundaryCallback(1, service, MovieDatabase(application)))
+            MovieDatabase(getApplication()).movieDao().getTopRatedPaged(), config)
+                .setBoundaryCallback(MovieBoundaryCallback(1, service, MovieDatabase(application)))
     }
 }

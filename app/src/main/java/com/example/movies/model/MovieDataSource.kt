@@ -14,7 +14,7 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
 class MovieDataSource(app: Application, private val code: Int):PageKeyedDataSource<Int, Movie>() {
-    private val service = ApiService()
+    private val service = ApiService(app)
     private val disposable = CompositeDisposable()
     private val application = app
     private val TOP_RATED = 0

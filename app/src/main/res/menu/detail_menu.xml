@@ -5,7 +5,6 @@
         android:id="@+id/action_favorite"
         android:title="@string/favorite"
         android:checkable="true"
-        android:checked="false"
         android:icon="@drawable/ic_star_border"
         app:showAsAction="ifRoom"/>
 </menu>

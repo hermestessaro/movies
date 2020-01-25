@@ -1,5 +1,7 @@
 package com.example.movies.util
 
+import android.content.Context
+import android.net.ConnectivityManager
 import android.util.Log
 import android.widget.Toast
 import androidx.annotation.MainThread
@@ -32,41 +34,45 @@ class MovieBoundaryCallback(
     //no items in db
     @MainThread
     override fun onZeroItemsLoaded() {
-        disposable.add(
-            determineServiceCall(code, 1)!!
-                .subscribeOn(Schedulers.newThread()) //to run the call to the api on a background thread
-                .observeOn(AndroidSchedulers.mainThread()) //result of the process will be computed in the main thread
-                .subscribeWith(object : DisposableSingleObserver<ApiAnswer>() { //observer of the single
-                    override fun onSuccess(answer: ApiAnswer) {
-                        Log.d("pei", "pei")
-                        saveInDatabase(answer.results)
-                    }
+        determineServiceCall(code, 1)
+            ?.subscribeOn(Schedulers.newThread()) //to run the call to the api on a background thread
+            ?.observeOn(AndroidSchedulers.mainThread()) //result of the process will be computed in the main thread
+            ?.subscribeWith(object : DisposableSingleObserver<ApiAnswer>() { //observer of the single
+                override fun onSuccess(answer: ApiAnswer) {
+                    Log.d("pei", "pei")
+                    saveInDatabase(answer.results)
+                }
 
-                    override fun onError(e: Throwable) {
-                        e.printStackTrace()
-                    }
-                })
-        )
+                override fun onError(e: Throwable) {
+                    e.printStackTrace()
+                }
+            })?.let {
+                disposable.add(
+                    it
+            )
+            }
     }
 
     //end of data in db
     override fun onItemAtEndLoaded(itemAtEnd: Movie) {
         lastRequestedPage++
-        disposable.add(
-            determineServiceCall(code, lastRequestedPage)!!
-                .subscribeOn(Schedulers.newThread()) //to run the call to the api on a background thread
-                .observeOn(AndroidSchedulers.mainThread()) //result of the process will be computed in the main thread
-                .subscribeWith(object : DisposableSingleObserver<ApiAnswer>() { //observer of the single
-                    override fun onSuccess(answer: ApiAnswer) {
-                        Log.d("pei1", "pei1")
-                        saveInDatabase(answer.results)
-                    }
+        determineServiceCall(code, lastRequestedPage)
+            ?.subscribeOn(Schedulers.newThread()) //to run the call to the api on a background thread
+            ?.observeOn(AndroidSchedulers.mainThread()) //result of the process will be computed in the main thread
+            ?.subscribeWith(object : DisposableSingleObserver<ApiAnswer>() { //observer of the single
+                override fun onSuccess(answer: ApiAnswer) {
+                    Log.d("pei1", "pei1")
+                    saveInDatabase(answer.results)
+                }
 
-                    override fun onError(e: Throwable) {
-                        e.printStackTrace()
-                    }
-                })
-        )
+                override fun onError(e: Throwable) {
+                    e.printStackTrace()
+                }
+            })?.let {
+                disposable.add(
+                    it
+            )
+            }
     }
 
 
@@ -96,5 +102,10 @@ class MovieBoundaryCallback(
             }
             database.movieDao().insertAll(movies)
         }
+    }
+
+    fun Context.isConnectedToNetwork(): Boolean {
+        val connectivityManager = this.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager?
+        return connectivityManager?.activeNetworkInfo?.isConnectedOrConnecting() ?: false
     }
 }
