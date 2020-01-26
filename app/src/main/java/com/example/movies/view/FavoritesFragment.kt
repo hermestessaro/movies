@@ -9,13 +9,15 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.movies.R
+import com.example.movies.view.adapters.MoviesListAdapter
 import com.example.movies.viewmodel.FavoritesViewModel
 import kotlinx.android.synthetic.main.fragment_list_movies.*
 
 class FavoritesFragment : Fragment() {
 
     private lateinit var viewModel: FavoritesViewModel
-    private val moviesListAdapter = MoviesListAdapter(arrayListOf())
+    private val moviesListAdapter =
+        MoviesListAdapter(arrayListOf())
 
     override fun onCreateView(
         inflater: LayoutInflater,

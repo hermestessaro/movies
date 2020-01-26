@@ -11,6 +11,7 @@ import androidx.paging.PagedList
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.movies.R
 import com.example.movies.model.Movie
+import com.example.movies.view.adapters.MoviesPagedListAdapter
 import com.example.movies.viewmodel.TopRatedViewModel
 import kotlinx.android.synthetic.main.fragment_list_movies.*
 

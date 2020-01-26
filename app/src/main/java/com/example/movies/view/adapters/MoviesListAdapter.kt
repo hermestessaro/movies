@@ -1,4 +1,4 @@
-package com.example.movies.view
+package com.example.movies.view.adapters
 
 import android.view.LayoutInflater
 import android.view.View
@@ -9,9 +9,11 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.movies.R
 import com.example.movies.databinding.ItemMovieBinding
 import com.example.movies.model.Movie
+import com.example.movies.view.FavoritesFragmentDirections
 import kotlinx.android.synthetic.main.item_movie.view.*
 
-class MoviesListAdapter(val moviesList: ArrayList<Movie>) : RecyclerView.Adapter<MoviesListAdapter.MovieViewHolder>(), MovieClickListener {
+class MoviesListAdapter(val moviesList: ArrayList<Movie>) : RecyclerView.Adapter<MoviesListAdapter.MovieViewHolder>(),
+    MovieClickListener {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MovieViewHolder {
         val inflater = LayoutInflater.from(parent.context)

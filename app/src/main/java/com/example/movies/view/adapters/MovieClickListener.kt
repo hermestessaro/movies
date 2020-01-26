@@ -1,4 +1,4 @@
-package com.example.movies.view
+package com.example.movies.view.adapters
 
 import android.view.View
 

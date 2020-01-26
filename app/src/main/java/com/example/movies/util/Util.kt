@@ -3,13 +3,10 @@ package com.example.movies.util
 import android.content.Context
 import android.widget.ImageView
 import androidx.databinding.BindingAdapter
-import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.CircularProgressDrawable
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.example.movies.R
-import com.example.movies.databinding.ItemMovieBinding
-import com.example.movies.view.MoviesListAdapter
 
 fun getProgressDrawable(context: Context): CircularProgressDrawable {
     return CircularProgressDrawable(context).apply {

@@ -10,7 +10,7 @@
             type="com.example.movies.model.Movie" />
         <variable
             name="listener"
-            type="com.example.movies.view.MovieClickListener" />
+            type="com.example.movies.view.adapters.MovieClickListener" />
     </data>
 
     <LinearLayout

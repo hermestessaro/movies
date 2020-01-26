@@ -1,4 +1,4 @@
-package com.example.movies.view
+package com.example.movies.view.adapters
 
 import android.view.LayoutInflater
 import android.view.View
@@ -11,6 +11,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.movies.R
 import com.example.movies.databinding.ItemMovieBinding
 import com.example.movies.model.Movie
+import com.example.movies.view.FavoritesFragmentDirections
+import com.example.movies.view.PopularFragmentDirections
+import com.example.movies.view.TopRatedFragmentDirections
 import kotlinx.android.synthetic.main.item_movie.view.*
 
 class MoviesPagedListAdapter(val listType: Int): MovieClickListener,
