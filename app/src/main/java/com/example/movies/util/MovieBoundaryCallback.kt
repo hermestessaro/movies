@@ -39,7 +39,6 @@ class MovieBoundaryCallback(
             ?.observeOn(AndroidSchedulers.mainThread()) //result of the process will be computed in the main thread
             ?.subscribeWith(object : DisposableSingleObserver<ApiAnswer>() { //observer of the single
                 override fun onSuccess(answer: ApiAnswer) {
-                    Log.d("pei", "pei")
                     saveInDatabase(answer.results)
                 }
 
@@ -61,7 +60,6 @@ class MovieBoundaryCallback(
             ?.observeOn(AndroidSchedulers.mainThread()) //result of the process will be computed in the main thread
             ?.subscribeWith(object : DisposableSingleObserver<ApiAnswer>() { //observer of the single
                 override fun onSuccess(answer: ApiAnswer) {
-                    Log.d("pei1", "pei1")
                     saveInDatabase(answer.results)
                 }
 

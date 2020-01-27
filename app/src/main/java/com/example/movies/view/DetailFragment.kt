@@ -77,12 +77,10 @@ class DetailFragment : Fragment() {
         val item = menu.findItem(R.id.action_favorite)
         currentMovie?.let {
             if(it.favorited){
-                Log.d("favorited", "true")
                 item.setIcon(R.drawable.ic_star)
                 item.setChecked(true)
             }
             else{
-                Log.d("favorited", "false")
                 item.setIcon(R.drawable.ic_star_border)
                 item.setChecked(false)
             }
