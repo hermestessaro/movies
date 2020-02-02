@@ -27,7 +27,7 @@ class DetailFragment : Fragment() {
     private var movieId = 0
 
     private lateinit var dataBinding: FragmentDetailBinding
-    private var currentMovie: Movie? = null
+    //private var currentMovie: Movie? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -53,7 +53,6 @@ class DetailFragment : Fragment() {
 
     fun observeViewModel(){
         viewModel.movieLiveData.observe(this, Observer {movie ->
-            currentMovie = movie
             movie?.let{
                 dataBinding.movie = movie
                 invalidateOptionsMenu(activity)
@@ -75,7 +74,17 @@ class DetailFragment : Fragment() {
 
     override fun onPrepareOptionsMenu(menu: Menu) {
         val item = menu.findItem(R.id.action_favorite)
-        currentMovie?.let {
+        when(viewModel.returnMovieFavoritedState()){
+            1 -> {
+                item.setIcon(R.drawable.ic_star)
+                item.setChecked(true)
+            }
+            2 -> {
+                item.setIcon(R.drawable.ic_star_border)
+                item.setChecked(false)
+            }
+        }
+        /*currentMovie?.let {
             if(it.favorited){
                 item.setIcon(R.drawable.ic_star)
                 item.setChecked(true)
@@ -84,13 +93,27 @@ class DetailFragment : Fragment() {
                 item.setIcon(R.drawable.ic_star_border)
                 item.setChecked(false)
             }
-        }
+        }*/
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when(item.itemId){
             R.id.action_favorite -> {
-                currentMovie?.let{
+
+                when(viewModel.returnMovieFavoritedState()){
+                    1 -> {
+                        //tira dos favoritos
+                        viewModel.changeFavorite(false, movieId)
+                        changeMenuItemState(item)
+                    }
+                    0 -> {
+                        //coloca nos favoritos
+                        viewModel.changeFavorite(true, movieId)
+                        changeMenuItemState(item)
+                    }
+                }
+
+                /*currentMovie?.let{
                     if(it.favorited){
                         //tira dos favoritos
                         viewModel.changeFavorite(false, movieId)
@@ -104,6 +127,7 @@ class DetailFragment : Fragment() {
                         it.favorited = true
                     }
                 }
+                 */
 
                 //Toast.makeText(context, "favorito", Toast.LENGTH_SHORT).show()
             }

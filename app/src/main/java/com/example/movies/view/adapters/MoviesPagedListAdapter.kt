@@ -44,20 +44,24 @@ class MoviesPagedListAdapter(val listType: Int): MovieClickListener,
     override fun onMovieClicked(v: View) {
         val movieId = v.movieId.text.toString().toInt()
 
-        if (listType == 0) {
-            val action = TopRatedFragmentDirections.ActionDetail()
-            action.movieId = movieId
-            Navigation.findNavController(v).navigate(action)
-        }
-        if (listType == 1) {
-            val action = PopularFragmentDirections.ActionDetail()
-            action.movieId = movieId
-            Navigation.findNavController(v).navigate(action)
-        }
-        if (listType == 2) {
-            val action = FavoritesFragmentDirections.ActionDetail()
-            action.movieId = movieId
-            Navigation.findNavController(v).navigate(action)
+        when(listType){
+            0 -> {
+                val action = TopRatedFragmentDirections.ActionDetail()
+                action.movieId = movieId
+                Navigation.findNavController(v).navigate(action)
+            }
+
+            1 -> {
+                val action = PopularFragmentDirections.ActionDetail()
+                action.movieId = movieId
+                Navigation.findNavController(v).navigate(action)
+            }
+
+            2 -> {
+                val action = FavoritesFragmentDirections.ActionDetail()
+                action.movieId = movieId
+                Navigation.findNavController(v).navigate(action)
+            }
         }
 
 

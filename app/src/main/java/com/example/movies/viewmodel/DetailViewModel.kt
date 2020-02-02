@@ -22,4 +22,13 @@ class DetailViewModel(application: Application): BaseViewModel(application) {
             MovieDatabase(getApplication()).movieDao().updateFavorited(value, movieId)
         }
     }
+
+
+
+    fun returnMovieFavoritedState(): Int{
+        if(movieLiveData.value?.favorited == true){
+            return 1
+        }
+        else return 0
+    }
 }
