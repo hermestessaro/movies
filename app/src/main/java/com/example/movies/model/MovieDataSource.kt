@@ -12,6 +12,7 @@ import io.reactivex.observers.DisposableSingleObserver
 import io.reactivex.schedulers.Schedulers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import retrofit2.Response
 
 class MovieDataSource(app: Application, private val code: Int):PageKeyedDataSource<Int, Movie>() {
     private val service = ApiService(app)
@@ -24,7 +25,7 @@ class MovieDataSource(app: Application, private val code: Int):PageKeyedDataSour
         params: LoadInitialParams<Int>,
         callback: LoadInitialCallback<Int, Movie>
     ) {
-        disposable.add(determineServiceCall(code, 1)!!
+        /*disposable.add(determineServiceCall(code, 1)!!
             .subscribeOn(Schedulers.newThread())
             .observeOn(AndroidSchedulers.mainThread()) //result of the process will be computed in the main thread
             .subscribeWith(object : DisposableSingleObserver<ApiAnswer>() { //observer of the single
@@ -37,11 +38,11 @@ class MovieDataSource(app: Application, private val code: Int):PageKeyedDataSour
                     callback.onError(e)
                 }
             })
-        )
+        )*/
     }
 
     override fun loadAfter(params: LoadParams<Int>, callback: LoadCallback<Int, Movie>) {
-        disposable.add(determineServiceCall(code, params.key)!!
+        /*disposable.add(determineServiceCall(code, params.key)!!
             .subscribeOn(Schedulers.newThread())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeWith(object : DisposableSingleObserver<ApiAnswer>() {
@@ -54,11 +55,11 @@ class MovieDataSource(app: Application, private val code: Int):PageKeyedDataSour
                     callback.onError(e)
                 }
             })
-        )
+        )*/
     }
 
     override fun loadBefore(params: LoadParams<Int>, callback: LoadCallback<Int, Movie>) {
-        disposable.add(determineServiceCall(code, 1)!!
+        /*disposable.add(determineServiceCall(code, 1)!!
             .subscribeOn(Schedulers.newThread())
             .observeOn(AndroidSchedulers.mainThread()) //result of the process will be computed in the main thread
             .subscribeWith(object : DisposableSingleObserver<ApiAnswer>() { //observer of the single
@@ -71,7 +72,7 @@ class MovieDataSource(app: Application, private val code: Int):PageKeyedDataSour
                     callback.onError(e)
                 }
             })
-        )
+        )*/
     }
 
     private fun storeMoviesLocally(list: List<Movie>, application: Application) {
@@ -85,7 +86,7 @@ class MovieDataSource(app: Application, private val code: Int):PageKeyedDataSour
 
     }
 
-    private fun determineServiceCall(code: Int, page:Int): Single<ApiAnswer>?{
+    private suspend fun determineServiceCall(code: Int, page:Int): Response<ApiAnswer>?{
         if(code == TOP_RATED){
             return service.getTopRated(page)
         }

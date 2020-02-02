@@ -15,8 +15,9 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.observers.DisposableSingleObserver
 import io.reactivex.schedulers.Schedulers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
+import retrofit2.HttpException
+import retrofit2.Response
 import java.util.concurrent.Executor
 
 class MovieBoundaryCallback(
@@ -34,27 +35,44 @@ class MovieBoundaryCallback(
     //no items in db
     @MainThread
     override fun onZeroItemsLoaded() {
-        determineServiceCall(code, 1)
-            ?.subscribeOn(Schedulers.newThread()) //to run the call to the api on a background thread
-            ?.observeOn(AndroidSchedulers.mainThread()) //result of the process will be computed in the main thread
-            ?.subscribeWith(object : DisposableSingleObserver<ApiAnswer>() { //observer of the single
-                override fun onSuccess(answer: ApiAnswer) {
-                    saveInDatabase(answer.results)
-                }
-
-                override fun onError(e: Throwable) {
+        CoroutineScope(Dispatchers.IO).launch {
+            val response = determineServiceCall(code, lastRequestedPage)
+            withContext(Dispatchers.Main){
+                try {
+                    if(response?.isSuccessful!!){
+                        saveInDatabase(response.body()!!.results)
+                    }
+                } catch (e: HttpException){
+                    e.printStackTrace()
+                } catch (e: Throwable){
                     e.printStackTrace()
                 }
-            })?.let {
-                disposable.add(
-                    it
-            )
+
             }
+        }
+
     }
 
     //end of data in db
     override fun onItemAtEndLoaded(itemAtEnd: Movie) {
         lastRequestedPage++
+        CoroutineScope(Dispatchers.IO).launch {
+            val response = determineServiceCall(code, lastRequestedPage)
+            withContext(Dispatchers.Main){
+                try {
+                    if(response?.isSuccessful!!){
+                        saveInDatabase(response.body()!!.results)
+                    }
+                } catch (e: HttpException){
+                    e.printStackTrace()
+                } catch (e: Throwable){
+                    e.printStackTrace()
+                }
+
+            }
+        }
+
+        /*
         determineServiceCall(code, lastRequestedPage)
             ?.subscribeOn(Schedulers.newThread()) //to run the call to the api on a background thread
             ?.observeOn(AndroidSchedulers.mainThread()) //result of the process will be computed in the main thread
@@ -70,15 +88,11 @@ class MovieBoundaryCallback(
                 disposable.add(
                     it
             )
-            }
+            }*/
     }
 
 
-    fun onCleared(){
-        disposable.clear()
-    }
-
-    private fun determineServiceCall(code: Int, page:Int): Single<ApiAnswer>?{
+    private suspend fun determineServiceCall(code: Int, page:Int): Response<ApiAnswer>?{
         if(code == TOP_RATED){
             return service.getTopRated(page)
         }

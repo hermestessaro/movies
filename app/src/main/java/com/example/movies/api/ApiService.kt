@@ -5,6 +5,7 @@ import com.example.movies.model.Movie
 import com.example.movies.util.NetworkConnectionInterceptor
 import io.reactivex.Single
 import okhttp3.OkHttpClient
+import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
@@ -36,11 +37,11 @@ class ApiService(val context: Context) {
         .build()
     }
 
-    fun getTopRated(page: Int): Single<ApiAnswer>{
+    suspend fun getTopRated(page: Int): Response<ApiAnswer>{
         return api.getTopRated(page)
     }
 
-    fun getPopular(page: Int): Single<ApiAnswer>{
+    suspend fun getPopular(page: Int): Response<ApiAnswer>{
         return api.getPopular(page)
     }
 }
