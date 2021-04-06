@@ -36,10 +36,4 @@ data class Movie(
 
     @ColumnInfo(name="favorited")
     var favorited: Boolean
-) {
-    //@PrimaryKey(autoGenerate = true)
-    //var uuid: Int = 0
-
-
-
-}
+)

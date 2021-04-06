@@ -13,13 +13,7 @@ interface MovieDao {
     suspend fun insertAll(movies: List<Movie>): List<Long>
 
     @Query("SELECT * FROM movie ORDER BY vote_average DESC")
-    fun getTopRated(): List<Movie>
-
-    @Query("SELECT * FROM movie ORDER BY vote_average DESC")
     fun getTopRatedPaged(): DataSource.Factory<Int, Movie>
-
-    @Query("SELECT * FROM movie ORDER BY popularity DESC")
-    fun getPopular(): List<Movie>
 
     @Query("SELECT * FROM movie ORDER BY popularity DESC")
     fun getPopularPaged(): DataSource.Factory<Int, Movie>
@@ -35,7 +29,4 @@ interface MovieDao {
 
     @Query("DELETE FROM movie")
     fun deleteAllMovies()
-
-    //@Query("SELECT * FROM movie WHERE favorited = 1")
-    //suspend fun getAllFavorites()
 }
