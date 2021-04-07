@@ -8,8 +8,8 @@ import retrofit2.http.Query
 
 interface Api {
     @GET("top_rated")
-    suspend fun getTopRated(@Query("page") page: Int): Response<ApiAnswer>
+    suspend fun getTopRated(@Query("page") page: Int): Response<ApiAnswer?>
 
     @GET("popular")
-    suspend fun getPopular(@Query("page") page: Int): Response<ApiAnswer>
+    suspend fun getPopular(@Query("page") page: Int): Response<ApiAnswer?>
 }

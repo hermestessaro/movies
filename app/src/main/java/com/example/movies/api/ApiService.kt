@@ -18,13 +18,13 @@ class ApiService(val context: Context) {
     private val api = Retrofit.Builder()
         .baseUrl(BASE_URL)
         .addConverterFactory(GsonConverterFactory.create())
-        .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
         .client(getClient())
         .build()
         .create(Api::class.java)
 
-    fun getClient(): OkHttpClient {
-        return OkHttpClient.Builder().addInterceptor{
+    private fun getClient(): OkHttpClient {
+        return OkHttpClient.Builder()
+            .addInterceptor{
             val token ="Bearer $API_ACCESS_TOKEN"
             it.proceed(
                 it.request().newBuilder()
@@ -37,11 +37,11 @@ class ApiService(val context: Context) {
         .build()
     }
 
-    suspend fun getTopRated(page: Int): Response<ApiAnswer>{
+    suspend fun getTopRated(page: Int): Response<ApiAnswer?>{
         return api.getTopRated(page)
     }
 
-    suspend fun getPopular(page: Int): Response<ApiAnswer>{
+    suspend fun getPopular(page: Int): Response<ApiAnswer?>{
         return api.getPopular(page)
     }
 }

@@ -71,28 +71,10 @@ class MovieBoundaryCallback(
 
             }
         }
-
-        /*
-        determineServiceCall(code, lastRequestedPage)
-            ?.subscribeOn(Schedulers.newThread()) //to run the call to the api on a background thread
-            ?.observeOn(AndroidSchedulers.mainThread()) //result of the process will be computed in the main thread
-            ?.subscribeWith(object : DisposableSingleObserver<ApiAnswer>() { //observer of the single
-                override fun onSuccess(answer: ApiAnswer) {
-                    saveInDatabase(answer.results)
-                }
-
-                override fun onError(e: Throwable) {
-                    e.printStackTrace()
-                }
-            })?.let {
-                disposable.add(
-                    it
-            )
-            }*/
     }
 
 
-    private suspend fun determineServiceCall(code: Int, page:Int): Response<ApiAnswer>?{
+    private suspend fun determineServiceCall(code: Int, page:Int): Response<ApiAnswer?>?{
         if(code == TOP_RATED){
             return service.getTopRated(page)
         }
